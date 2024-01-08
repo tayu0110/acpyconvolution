@@ -1,0 +1,15 @@
+[package]
+name = "acpyconvoltion"
+version = "0.1.0"
+edition = "2021"
+authors = ["tayu0110"]
+license = "CC0-1.0"
+description = "aclibrary convolution for Python implemented by Rust"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "acpyconvolution"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.19.0" }
