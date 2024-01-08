@@ -38,6 +38,7 @@ impl<M: Modulo> NumberTheoreticTransform<M> for [MontgomeryModint<M>] {
         unsafe { gentleman_sande_radix_4_butterfly(n, self, &Self::CACHE) }
     }
 
+    #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
     #[inline]
     fn intt(&mut self) {
         let n = self.len();
@@ -58,6 +59,19 @@ impl<M: Modulo> NumberTheoreticTransform<M> for [MontgomeryModint<M>] {
         } else {
             self.iter_mut().for_each(|a| *a *= ninv);
         }
+    }
+
+    #[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
+    #[inline]
+    fn intt(&mut self) {
+        let n = self.len();
+        assert_eq!(n, 1 << n.trailing_zeros());
+        assert!(n <= (1 << (M::N - 1).trailing_zeros()));
+
+        unsafe { cooley_tukey_radix_4_butterfly_inv(n, self, &Self::CACHE) }
+
+        let ninv = Modint::raw(n as u32).inv();
+        self.iter_mut().for_each(|a| *a *= ninv);
     }
 }
 

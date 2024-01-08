@@ -16,8 +16,10 @@ use std::arch::x86_64::{
 };
 
 type Modint<M> = MontgomeryModint<M>;
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 type Modintx8<M> = MontgomeryModintx8<M>;
 
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 macro_rules! radix4_inner {
     ($c0:expr, $c1:expr, $c2:expr, $c3:expr, $rot:expr, $rot2:expr, $rot3:expr, $imag:expr) => {{
         let (c0, c1, c2, c3) = ($c0, $c1, $c2, $c3);

@@ -1,5 +1,6 @@
 mod modulo;
 mod montgomery;
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 mod simd;
 
 use std::convert::From;
@@ -11,6 +12,7 @@ use std::str::FromStr;
 
 pub use modulo::*;
 use montgomery::*;
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 pub use simd::*;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
