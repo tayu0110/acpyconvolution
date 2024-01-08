@@ -33,6 +33,7 @@ pub fn bit_reverse<T>(deg: usize, a: &mut [T]) {
     }
 }
 
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 #[inline]
 #[target_feature(enable = "avx")]
 #[target_feature(enable = "avx2")]
@@ -52,6 +53,14 @@ pub(crate) unsafe fn u32tomint<M: Modulo>(a: &mut [u32]) {
     }
 }
 
+#[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
+#[inline]
+pub(crate) unsafe fn u32tomint<M: Modulo>(a: &mut [u32]) {
+    debug_assert_eq!(a.len(), 1 << a.len().trailing_zeros());
+    a.iter_mut().for_each(|a| *a = Modint::<M>::from(*a).val);
+}
+
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 #[inline]
 #[target_feature(enable = "avx")]
 #[target_feature(enable = "avx2")]
@@ -68,4 +77,11 @@ pub(crate) unsafe fn minttou32<M: Modulo>(a: &mut [Modint<M>]) {
     } else {
         a.iter_mut().for_each(|a| *a = Modint::from_rawval(a.val()));
     }
+}
+
+#[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
+#[inline]
+pub(crate) unsafe fn minttou32<M: Modulo>(a: &mut [Modint<M>]) {
+    debug_assert_eq!(a.len(), 1 << a.len().trailing_zeros());
+    a.iter_mut().for_each(|a| *a = Modint::from_rawval(a.val()));
 }
