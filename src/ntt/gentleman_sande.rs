@@ -2,6 +2,12 @@ use super::FftCache;
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 use crate::MontgomeryModintx8;
 use crate::{Modulo, MontgomeryModint};
+#[cfg(target_arch = "x86")]
+use std::arch::x86::{
+    _mm256_permute2f128_si256 as permute2f128, _mm256_permute4x64_epi64 as permute4x64,
+    _mm256_setr_epi32, _mm256_storeu_si256 as storeu, _mm256_unpackhi_epi64 as unpackhi64,
+    _mm256_unpacklo_epi64 as unpacklo64,
+};
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 use std::arch::x86_64::{
     _mm256_permute2f128_si256 as permute2f128, _mm256_permute4x64_epi64 as permute4x64,

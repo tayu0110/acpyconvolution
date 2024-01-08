@@ -1,4 +1,12 @@
-#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
+#[cfg(target_arch = "x86")]
+use std::arch::x86::{
+    __m256i, _mm256_add_epi32 as addi32, _mm256_add_epi64 as addi64, _mm256_and_si256 as and256,
+    _mm256_blend_epi32 as blendi32, _mm256_cmpeq_epi32 as eqi32, _mm256_cmpgt_epi32,
+    _mm256_max_epu32 as maxu32, _mm256_min_epu32, _mm256_mul_epu32 as mulu32,
+    _mm256_mullo_epi32 as mulloi32, _mm256_or_si256, _mm256_setzero_si256 as zero256,
+    _mm256_shuffle_epi32 as shufi32, _mm256_sub_epi32 as subi32, _mm256_xor_si256 as xor256,
+};
+#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::{
     __m256i, _mm256_add_epi32 as addi32, _mm256_add_epi64 as addi64, _mm256_and_si256 as and256,
     _mm256_blend_epi32 as blendi32, _mm256_cmpeq_epi32 as eqi32, _mm256_cmpgt_epi32,

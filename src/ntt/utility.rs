@@ -1,4 +1,6 @@
-#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
+#[cfg(target_arch = "x86")]
+use std::arch::x86::_mm256_storeu_si256;
+#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::_mm256_storeu_si256;
 
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]

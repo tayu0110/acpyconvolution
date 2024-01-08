@@ -1,14 +1,5 @@
-#[cfg(feature = "arbitrary-modulo-convolution")]
-mod arbitrary_modulo_convolution;
-#[cfg(feature = "large-convolution")]
-mod large_convolution;
-
 use crate::ntt::NumberTheoreticTransform;
 use crate::{Modulo, MontgomeryModint, MontgomeryModintx8};
-#[cfg(feature = "arbitrary-modulo-convolution")]
-pub use arbitrary_modulo_convolution::*;
-#[cfg(feature = "large-convolution")]
-pub use large_convolution::*;
 use std::mem::transmute;
 
 type Modint<M> = MontgomeryModint<M>;

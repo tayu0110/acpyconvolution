@@ -1,4 +1,6 @@
-#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
+#[cfg(target_arch = "x86")]
+use std::arch::x86::__m256i;
+#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::__m256i;
 use std::fmt::Debug;
 use std::marker;

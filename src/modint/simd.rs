@@ -1,4 +1,10 @@
-#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
+#[cfg(target_arch = "x86")]
+use std::arch::x86::{
+    __m256i, _mm256_i32gather_epi32, _mm256_loadu_si256, _mm256_permute2x128_si256,
+    _mm256_set1_epi32, _mm256_setzero_si256, _mm256_shuffle_epi32, _mm256_storeu_si256,
+    _mm256_unpackhi_epi32, _mm256_unpackhi_epi64, _mm256_unpacklo_epi32, _mm256_unpacklo_epi64,
+};
+#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::{
     __m256i, _mm256_i32gather_epi32, _mm256_loadu_si256, _mm256_permute2x128_si256,
     _mm256_set1_epi32, _mm256_setzero_si256, _mm256_shuffle_epi32, _mm256_storeu_si256,
