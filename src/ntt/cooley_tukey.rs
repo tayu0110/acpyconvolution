@@ -362,31 +362,6 @@ unsafe fn cooley_tukey_radix_4_kernel<M: Modulo>(
 
 /// # Safety
 /// The length of `a` must be the power of 2.
-#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
-#[cfg(test)]
-#[inline]
-#[target_feature(enable = "avx2")]
-pub unsafe fn cooley_tukey_radix_4_butterfly<M: Modulo>(
-    deg: usize,
-    a: &mut [Modint<M>],
-    cache: &FftCache<M>,
-) {
-    let log = deg.trailing_zeros();
-    if log & 1 != 0 {
-        let width = 1 << 1;
-        let offset = width >> 1;
-        cooley_tukey_radix_2_kernel(deg, width, offset, a, &cache.rate2);
-    }
-    for i in (log & 1..log).step_by(2) {
-        let width = 1 << (i + 2);
-        let offset = width >> 2;
-        cooley_tukey_radix_4_kernel(deg, width, offset, cache.root[2], a, &cache.rate3);
-    }
-}
-
-/// # Safety
-/// The length of `a` must be the power of 2.
-#[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
 #[cfg(test)]
 #[inline]
 pub unsafe fn cooley_tukey_radix_4_butterfly<M: Modulo>(
@@ -409,30 +384,6 @@ pub unsafe fn cooley_tukey_radix_4_butterfly<M: Modulo>(
 
 /// # Safety
 /// The length of `a` must be the power of 2.
-#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
-#[inline]
-#[target_feature(enable = "avx2")]
-pub unsafe fn cooley_tukey_radix_4_butterfly_inv<M: Modulo>(
-    deg: usize,
-    a: &mut [Modint<M>],
-    cache: &FftCache<M>,
-) {
-    let log = deg.trailing_zeros();
-    if log & 1 != 0 {
-        let width = 1 << 1;
-        let offset = width >> 1;
-        cooley_tukey_radix_2_kernel(deg, width, offset, a, &cache.irate2);
-    }
-    for i in (log & 1..log).step_by(2) {
-        let width = 1 << (i + 2);
-        let offset = width >> 2;
-        cooley_tukey_radix_4_kernel(deg, width, offset, cache.iroot[2], a, &cache.irate3);
-    }
-}
-
-/// # Safety
-/// The length of `a` must be the power of 2.
-#[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
 #[inline]
 pub unsafe fn cooley_tukey_radix_4_butterfly_inv<M: Modulo>(
     deg: usize,

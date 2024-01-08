@@ -346,9 +346,7 @@ unsafe fn gentleman_sande_radix_4_kernel<M: Modulo>(
 
 /// # Safety
 /// The length of `a` must be the power of 2.
-#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 #[inline]
-#[target_feature(enable = "avx2")]
 pub unsafe fn gentleman_sande_radix_4_butterfly<M: Modulo>(
     deg: usize,
     a: &mut [Modint<M>],
@@ -369,57 +367,8 @@ pub unsafe fn gentleman_sande_radix_4_butterfly<M: Modulo>(
 
 /// # Safety
 /// The length of `a` must be the power of 2.
-#[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
-#[inline]
-#[target_feature(enable = "avx2")]
-pub unsafe fn gentleman_sande_radix_4_butterfly<M: Modulo>(
-    deg: usize,
-    a: &mut [Modint<M>],
-    cache: &FftCache<M>,
-) {
-    let log = deg.trailing_zeros();
-    for i in (0..log).step_by(2) {
-        let width = deg >> i;
-        if i + 1 == log {
-            let offset = width >> 1;
-            gentleman_sande_radix_2_kernel(deg, width, offset, a, &cache.rate2);
-        } else {
-            let offset = width >> 2;
-            gentleman_sande_radix_4_kernel(deg, width, offset, cache.root[2], a, &cache.rate3);
-        }
-    }
-}
-
-/// # Safety
-/// The length of `a` must be the power of 2.
-#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 #[cfg(test)]
 #[inline]
-#[target_feature(enable = "avx2")]
-pub unsafe fn gentleman_sande_radix_4_butterfly_inv<M: Modulo>(
-    deg: usize,
-    a: &mut [Modint<M>],
-    cache: &FftCache<M>,
-) {
-    let log = deg.trailing_zeros();
-    for i in (0..log).step_by(2) {
-        let width = deg >> i;
-        if i + 1 == log {
-            let offset = width >> 1;
-            gentleman_sande_radix_2_kernel(deg, width, offset, a, &cache.irate2);
-        } else {
-            let offset = width >> 2;
-            gentleman_sande_radix_4_kernel(deg, width, offset, cache.iroot[2], a, &cache.irate3);
-        }
-    }
-}
-
-/// # Safety
-/// The length of `a` must be the power of 2.
-#[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
-#[cfg(test)]
-#[inline]
-#[target_feature(enable = "avx2")]
 pub unsafe fn gentleman_sande_radix_4_butterfly_inv<M: Modulo>(
     deg: usize,
     a: &mut [Modint<M>],

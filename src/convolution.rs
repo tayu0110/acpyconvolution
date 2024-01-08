@@ -1,10 +1,14 @@
 use crate::ntt::NumberTheoreticTransform;
-use crate::{Modulo, MontgomeryModint, MontgomeryModintx8};
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
+use crate::MontgomeryModintx8;
+use crate::{Modulo, MontgomeryModint};
 use std::mem::transmute;
 
 type Modint<M> = MontgomeryModint<M>;
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 type Modintx8<M> = MontgomeryModintx8<M>;
 
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 #[inline]
 pub fn hadamard<M: Modulo>(a: &mut Vec<Modint<M>>, b: &[Modint<M>]) {
     if a.len() < 8 {
@@ -18,6 +22,12 @@ pub fn hadamard<M: Modulo>(a: &mut Vec<Modint<M>>, b: &[Modint<M>]) {
                 })
         }
     }
+}
+
+#[cfg(not(any(target_arch = "x86_64", target_arch = "x86")))]
+#[inline]
+pub fn hadamard<M: Modulo>(a: &mut Vec<Modint<M>>, b: &[Modint<M>]) {
+    a.iter_mut().zip(b).for_each(|(a, &b)| *a *= b);
 }
 
 #[inline]
